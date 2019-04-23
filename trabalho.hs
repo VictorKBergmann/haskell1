@@ -13,3 +13,5 @@ tira (t:x) = t
 conta :: [[String]] -> [(String,Int)]
 conta [] = []
 conta (a:x) = ( tira a , length(a)) : (conta (x))
+
+
