@@ -46,6 +46,27 @@ auxseparalinhas y x [] = []
 auxseparalinhas y x (a:z)
         |y<x = auxseparalinhas (y+1) x z
         |otherwise = a: (auxseparalinhas (y+1) x z) 
+       
+-- aula hj
+separalinhas :: String -> [String]
+separalinhas [] = []
+separalinhas x = takeWhile testaFinal x: separalinhas (tiraBarra (dropWhile testaFinal2 (tiraInicio x) ))
+
+
+testaFinal :: Char ->Bool --true se diferente de /n
+testaFinal c = c /='\n'        
+        
+testaFinal2 ::Char->Bool -- true se igual a /n
+testaFinal2 c = c=='\n'        
+        
+tiraBarra :: String->String
+tiraBarra [] = []
+tiraBarra x = dropWhile testaFinal2 ( x)
+       
+        
+tiraInicio::String->String
+tiraInicio [] = []
+tiraInicio (a:x) = dropWhile testaFinal (a:x)
 
 
 
