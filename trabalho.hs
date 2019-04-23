@@ -66,7 +66,8 @@ tiraBarra x = dropWhile testaFinal2 ( x)
         
 tiraInicio::String->String
 tiraInicio [] = []
-tiraInicio (a:x) = dropWhile testaFinal (a:x)
+tiraInicio s = dropWhile testaFinal s
+
 
 
 
