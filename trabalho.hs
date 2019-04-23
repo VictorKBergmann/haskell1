@@ -20,3 +20,33 @@ tira (t:x) = t
 conta :: [[String]] -> [(String,Int)]
 conta [] = []
 conta (a:x) = ( tira a , length(a)) : (conta (x))
+
+
+-- umas viagem que eu tive hj que acho q fazem sentido
+
+separalinhas :: String -> [String]
+length( takeWhile (/= '\n') s) == 0 = [] -- a base da recursao é essa, agr só falta completar ela
+
+
+
+teste:: Int->String->String->[String]
+teste 0 a b = []
+teste x a b = a:b : teste (x-1) a b
+
+
+
+
+
+
+aux1 :: Int->String->String
+aux1 x s = auxseparalinhas 0 x s
+
+auxseparalinhas :: Int->Int->String->String
+auxseparalinhas y x [] = []
+auxseparalinhas y x (a:z)
+        |y<x = auxseparalinhas (y+1) x z
+        |otherwise = a: (auxseparalinhas (y+1) x z) 
+
+
+
+
