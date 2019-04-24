@@ -33,6 +33,23 @@ teste 0 = []
 teste x = ' ' : teste (x-1)
 
 
+
+
+justifica :: String -> String
+justifica s = auxjustifica (separaLinhas s)
+
+auxjustifica :: [String] ->String
+auxjustifica [a] = a
+auxjustifica (a:x) = (justificaLinha a (tamanhoMaiorLinha (a:x))) ++ auxjustifica x
+
+justificaLinha:: String->Int->String
+justificaLinha s n = auxjustLinha (separaPalavras s) n
+
+auxjustLinha:: [String]->String
+
+
+
+
 junta :: [String] -> String
 junta [] = ""
 junta ( a : x ) = a ++ junta x 
