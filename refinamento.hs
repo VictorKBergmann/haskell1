@@ -10,6 +10,21 @@ auxseparaLinhas s =  dropWhile (== '\n') (dropWhile (/= '\n') s)
 tamanhoMaiorLinha :: [String]-> Int
 tamanhoMaiorLinha s = maximum( [length(x)|x <-s])
 
+separaPalavras :: String -> [String]
+separaPalavras [] = []
+separaPalavras s = rmvpalavrasVazias ( takeWhile (/= ' ') s : separaPalavras(auxseparaPalavras s)   )
+
+
+auxseparaPalavras :: String->String
+auxseparaPalavras s =  dropWhile (== ' ') (dropWhile (/= ' ') s)
+
+rmvpalavrasVazias :: [String] ->[String]   -- usado no separaPalavras
+rmvpalavrasVazias [] = []
+rmvpalavrasVazias (a:x)
+        |a /= "" = a: rmvpalavrasVazias x
+        |otherwise = rmvpalavrasVazias x 
+
+
 junta :: [String] -> String
 junta [] = ""
 junta ( a : x ) = a ++ junta x 
