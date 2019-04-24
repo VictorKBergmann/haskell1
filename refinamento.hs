@@ -24,6 +24,14 @@ rmvpalavrasVazias (a:x)
         |a /= "" = a: rmvpalavrasVazias x
         |otherwise = rmvpalavrasVazias x 
 
+insereEspacos :: Int -> String -> String
+insereEspacos x s = (teste x) ++ s
+
+
+teste :: Int->String
+teste 0 = []
+teste x = ' ' : teste (x-1)
+
 
 junta :: [String] -> String
 junta [] = ""
