@@ -68,10 +68,10 @@ justifica :: String -> String
 justifica a = junta( criaEspaso ( conta( ( separalinhas a ) ) ) , tamanhoMaiorLinha a  )
 
 -- criaespaso ta todo errado, pq eu ia comesar a fazer ele em listcompresion agr
-criaEspaso :: [(String,Int)] -> Int -> [String]
+criaEspaso :: [(String,Int)] -> Int -> ["linha","linha"]
 criaEspaso [ ( ( a : z ) ,b ) x 
-        | [a] == ""            let  ""
-        | b == x               let  ""
-        | x - b > 0 && a /= ' ' = [a] ++ criaEspaso (z,b+1) (x-1)
-        | otherwise             = [a] ++ " " ++ criaEspaso (z,b+1) (x-1)
-         --x - b > 0 && a == ' '
+        | [a] == [] && x /= b   =  
+        | b == x                =  a:z
+        | x - b > 0 && a /= ' ' = [a] ++ criaEspaso (z,b) (x)
+        | otherwise             = [a] ++ " " ++ criaEspaso (z,b+1) (x)
+--x - b > 0 && a == ' '
