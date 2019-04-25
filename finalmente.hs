@@ -43,10 +43,13 @@ auxjustifica [a] n = a ++ "\n"
 auxjustifica (a:x) n = (justificaLinha a n) ++ "\n"  ++ auxjustifica x n
 
 justificaLinha:: String->Int->String
-justificaLinha s n = var1 ++ auxjustfL (resto ( (n - var3) `mod` (length(var2))) (var2)      )  ((n - var3)`div` (length(var2)))   
+
+justificaLinha s n 
+        |length(var2) > 0 = var1 ++ auxjustfL (resto ( (n - var3) `mod` (length(var2))) (var2)      )  ((n - var3)`div` (length(var2))) 
+        |otherwise = insereEspacos (n - (var3) )  var1 
 	where 
-		var1 = head(separaPalavras s)
-		var2 = tail(separaPalavras s)				
+	        var1 = head(separaPalavras s)
+	        var2 = tail(separaPalavras s)				
 		var3 = length(s)
 										           				
 auxjustfL::[String]->Int->String
