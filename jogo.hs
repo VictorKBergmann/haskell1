@@ -63,3 +63,82 @@ test1 = do threadDelay 100000
            moveUp
            test1
 
+
+
+
+
+
+
+
+
+-----------------------------------
+
+data Diresao = Esq_cima| Esq_baixo | Dir_cima| Dir_baixo
+        deriving(Eq,Show)
+
+
+leftUp :: IO ()
+leftUp = do 
+   ClearFromCursorToBegining
+   cursorUpLine 1 
+   cursorBackward 2
+   putChar '@'
+   savecrusor
+   --skateMove
+   restoreCursor
+   direct Esq_cima
+
+
+rigthUp :: IO ()
+rigthUp = do 
+   ClearFromCursorToBegining
+   cursorUpLine 1 
+   putChar '@'
+   savecrusor
+   --skateMove
+   restoreCursor
+   direct Dir_cima
+
+rigthDown :: IO ()
+rigthDown = do 
+   ClearFromCursorToBegining
+   cursorDownLine 1 
+   putChar '@'
+   savecrusor
+   --skateMove
+   restoreCursor
+   direct Dir_baixo
+   
+leftDown :: IO ()
+leftDown = do 
+   ClearFromCursorToBegining
+   cursorDownLine 1
+   cursorBackward 2 
+   putChar '@'
+   savecrusor
+   --skateMove
+   restoreCursor
+   direct Esq_baixo
+   
+direct :: Diresao ->IO()
+direct Esq_cima = do
+   bolinha <- getCursorPosition0
+   terminal <-getTerminalSize
+   case bolinha of 
+   	 Just(x,y)->
+   	 case terminal of
+       Just(a,b)->
+       if x>=a 
+       then 
+         if y>=b
+         then
+           leftDown
+         else do
+           leftUp
+       else do 
+       	 if y>=b
+       	 then
+           rigthDown
+         else do
+           rigthUp
+
