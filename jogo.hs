@@ -88,11 +88,11 @@ directEB = do
   case bolinha of 
     Just(x,y)-> case terminal of
                     Just(a,b)-> if y=0 --parede inferior
-								  then rightUp
-								else if x=0 -- parede esquerda
-								  then rightDown	
+			          then rightUp
+				else if x=0 -- parede esquerda
+			          then rightDown	
 								
-								else leftDown -- nao toca em nenhuma parede 
+				else leftDown -- nao toca em nenhuma parede 
 
 
 directDB :: IO()
@@ -102,12 +102,12 @@ directDB = do
   case bolinha of 
     Just(x,y)-> case terminal of
                     Just(a,b)-> if y=0 --parede inferior
-								  then leftUp
+				  then leftUp
 					
-								else if x=a -- parede direita
-								  then leftDown
+			        else if x=a -- parede direita
+			          then leftDown
 								
-								else rightDown -- nao toca em nenhuma parede 
+				else rightDown -- nao toca em nenhuma parede 
 
 directDC :: IO()
 directDC = do
@@ -116,7 +116,7 @@ directDC = do
   case bolinha of 
     Just(x,y)-> case terminal of
                     Just(a,b)-> if x=a -- parede direita
-								  then leftUp
-								else if y=b --parede superior
-									then leftDown
-								else rightUp -- nao toca em nenhuma parede
+			          then leftUp
+				else if y=b --parede superior
+			          then leftDown
+			        else rightUp -- nao toca em nenhuma parede
