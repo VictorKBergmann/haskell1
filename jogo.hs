@@ -1,80 +1,74 @@
-import System.Console.ANSI
-import Data.Char
-import System.IO
-import Control.Concurrent
-
-
-data Diresao = Esq_cima| Esq_baixo | Dir_cima| Dir_baixo
-    deriving(Eq,Show)
 
 main :: IO()
 main = do
-  setCursorPosition 15 10
+  setCursorPosition 10 3
   clearScreen
-  threadDelay 1000000
+  saveCursor
   leftUp
 
 leftUp :: IO ()
 leftUp = do 
    threadDelay 1000000
-   clearFromCursorToScreenBeginning
+   clearScreen
+   restoreCursor
    hCursorUp stdout 1
-   hCursorBackward stdout 2
+   cursorBackward 2 
+   hPutChar stdout '@'
+   saveCursor
+   --skateMove
+   --restoreCursor
+   directEC
+
+rightUp :: IO ()
+rightUp = do 
+   threadDelay 1000000
+   clearScreen
+   restoreCursor
+   hCursorUp stdout 1
    hPutChar stdout '@'
    saveCursor
    --skateMove
    restoreCursor
    directEC
 
-
-rightUp :: IO ()
-rightUp = do 
-   threadDelay 1000000
-   clearFromCursorToScreenBeginning
-   cursorUpLine 1 
-   cursorFoward 1
-   hPutChar stdout '@'
-   saveCursor
-   --skateMove
-   restoreCursor
-   directDC
-
 rightDown :: IO ()
 rightDown = do 
    threadDelay 1000000
-   clearFromCursorToScreenBeginning
-   cursorDownLine 1 
+   clearScreen
+   restoreCursor
+   hCursorDown stdout 1
    hPutChar stdout '@'
    saveCursor
    --skateMove
    restoreCursor
    directDB
-   
+
 leftDown :: IO ()
 leftDown = do 
    threadDelay 1000000
-   clearFromCursorToScreenBeginning
-   cursorDownLine 1
+   clearScreen
+   restoreCursor
+   hCursorDown stdout 1
    cursorBackward 2 
    hPutChar stdout '@'
    saveCursor
    --skateMove
-   restoreCursor
+   --restoreCursor
    directEB
-   
-   
-directEC :: IO()
-directEC = do
+            
+directEB :: IO()
+directEB = do
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
+  print (show bolinha)
   case bolinha of 
     Just(x,y)-> case terminal of
-                    Just(a,b)-> if x==0 -- parede esquerda
-                                then rightUp
-                                else if y==b --parede superior
-                                then rightDown
-                                else leftUp -- nao toca em nenhuma parede
-                              
+                    Just(a,b)-> if y==1 --parede inferior
+                                then leftUp
+                                else if x==a -- parede esquerda
+                                then rightDown  
+                                else leftDown -- nao toca em nenhuma parede 
+                  
                 
 directEB :: IO()
 directEB = do
