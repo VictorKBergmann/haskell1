@@ -1,3 +1,11 @@
+import System.Console.ANSI
+import Data.Char
+import System.IO
+import Control.Concurrent
+
+
+data Diresao = Esq_cima| Esq_baixo | Dir_cima| Dir_baixo
+    deriving(Eq,Show)
 
 main :: IO()
 main = do
@@ -29,7 +37,7 @@ rightUp = do
    saveCursor
    --skateMove
    restoreCursor
-   directEC
+   directDC
 
 rightDown :: IO ()
 rightDown = do 
@@ -76,13 +84,13 @@ directEB :: IO()
 directEB = do
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
+  print (show bolinha)
   case bolinha of 
     Just(x,y)-> case terminal of
-                    Just(a,b)-> if y==0 --parede inferior
+                    Just(a,b)-> if y==1 --parede inferior
                                 then rightUp
-                                else if x==0 -- parede esquerda
-                                then rightDown  
-                
+                                else if x==a -- parede esquerda
+                                then leftUp                 
                                 else leftDown -- nao toca em nenhuma parede 
 
 
@@ -90,24 +98,24 @@ directDB :: IO()
 directDB = do
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
+  print (show bolinha)
   case bolinha of 
     Just(x,y)-> case terminal of
-                    Just(a,b)-> if y==0 --parede inferior
-                                then leftUp
-          
-                                else if x==a -- parede direita
+                    Just(a,b)-> if y==b --parede inferior
                                 then leftDown
-                
+                                else if x==a -- parede direita
+                                then leftUp
                                 else rightDown -- nao toca em nenhuma parede 
 
 directDC :: IO()
 directDC = do
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
+  print (show bolinha) 
   case bolinha of 
     Just(x,y)-> case terminal of
-                    Just(a,b)-> if x==a -- parede direita
+                    Just(a,b)-> if y==b -- parede direita
                                 then leftUp
-                                else if y==b --parede superior
-                                then leftDown
+                                else if x==0 --parede superior
+                                then rightDown
                                 else rightUp -- nao toca em nenhuma parede
