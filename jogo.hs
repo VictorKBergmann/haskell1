@@ -1,4 +1,3 @@
-
 import System.Console.ANSI
 import Data.Char
 import System.IO
@@ -62,28 +61,62 @@ leftDown = do
    restoreCursor
    directEB
    
+   
 directEC :: IO()
 directEC = do
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
   case bolinha of 
     Just(x,y)-> case terminal of
-                    Just(a,b)-> if x>=0 
-                                then 
-                                  if y>=b
-                                  then
-                                     leftDown
-                                  else leftUp
-                                else if y>=b
-                                     then rigthDown
-                                     else rigthUp
-
+                    Just(a,b)-> if x=0 -- parede esquerda
+								  then rigthUp
+								else if y=b --parede superior
+								  then rigthDown
+								else leftUp -- nao toca em nenhuma parede
+								
+								
+								
+								
+								
+								
+								
+			
 directEB :: IO()
-directEB = return() 
+directEB = do
+  bolinha <- getCursorPosition0
+  terminal <-getTerminalSize
+  case bolinha of 
+    Just(x,y)-> case terminal of
+                    Just(a,b)-> if y=0 --parede inferior
+								  then rightUp
+								else if x=0 -- parede esquerda
+								  then rightDown	
+								
+								else leftDown -- nao toca em nenhuma parede 
 
 
 directDB :: IO()
-directDB = return()
+directDB = do
+  bolinha <- getCursorPosition0
+  terminal <-getTerminalSize
+  case bolinha of 
+    Just(x,y)-> case terminal of
+                    Just(a,b)-> if y=0 --parede inferior
+								  then leftUp
+					
+								else if x=a -- parede direita
+								  then leftDown
+								
+								else rightDown -- nao toca em nenhuma parede 
 
 directDC :: IO()
-directDC = return()
+directDC = do
+  bolinha <- getCursorPosition0
+  terminal <-getTerminalSize
+  case bolinha of 
+    Just(x,y)-> case terminal of
+                    Just(a,b)-> if x=a -- parede direita
+								  then leftUp
+								else if y=b --parede superior
+									then leftDown
+								else rightUp -- nao toca em nenhuma parede
