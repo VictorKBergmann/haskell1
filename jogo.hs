@@ -56,19 +56,21 @@ leftDown = do
    --restoreCursor
    directEB
             
-directEB :: IO()
-directEB = do
+   
+directEC :: IO()
+directEC = do
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
   print (show bolinha)
   case bolinha of 
     Just(x,y)-> case terminal of
                     Just(a,b)-> if y==1 --parede inferior
-                                then leftUp
-                                else if x==a -- parede esquerda
-                                then rightDown  
-                                else leftDown -- nao toca em nenhuma parede 
-                  
+                                then rightUp
+                                else if x==0 -- parede esquerda
+                                then leftDown  
+                                else leftUp -- nao toca em nenhuma parede 
+                           
+         
                 
 directEB :: IO()
 directEB = do
