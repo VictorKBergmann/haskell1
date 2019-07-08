@@ -3,62 +3,55 @@ import Data.Char
 import System.IO
 import Control.Concurrent
 
+skateinit :: IO()
+skateinit = do
+  terminal <-getTerminalSize
+  case terminal of 
+    Just(y,x)-> do setCursorPosition (y-3) 
+                   saveCursor
+
 main :: IO()
 main = do
-  setCursorPosition 10 25
   clearScreen
-  saveCursor
-  rightUp
+  skateinit
+  v<-getCursorPosition0
+  print (show v)
+  setCursorPosition 10 25
   hideCursor
+  rightDown
 
 leftUp :: IO ()
 leftUp = do 
    threadDelay 100000
    clearScreen
-   --restoreCursor
    hCursorUp stdout 1
    cursorBackward 2 
    hPutChar stdout '@'
-   --saveCursor
-   --skateMove
-   --restoreCursor
    directEC
 
 rightUp :: IO ()
 rightUp = do 
    threadDelay 100000
    clearScreen
-   --restoreCursor
    hCursorUp stdout 1
    hPutChar stdout '@'
-   --saveCursor
-   --skateMove
-   --restoreCursor
    directDC
 
 rightDown :: IO ()
 rightDown = do 
    threadDelay 100000
    clearScreen
-   --restoreCursor
    hCursorDown stdout 1
    hPutChar stdout '@'
-   --saveCursor
-   --skateMove
-   --restoreCursor
    directDB
 
 leftDown :: IO ()
 leftDown = do 
    threadDelay 100000
    clearScreen
-   --restoreCursor
    hCursorDown stdout 1
    cursorBackward 2 
    hPutChar stdout '@'
-   --saveCursor
-   --skateMove
-   --restoreCursor
    directEB
             
 directEC :: IO()
@@ -108,20 +101,38 @@ directDB = do
   case bolinha of 
     Just(y,x)-> case terminal of
                     Just(y1,x1)-> if y == (y1-4) --parede inferior
-                                then restoreCursor
+                                then do
+                                  restoreCursor
+                                  p<-getCursorPosition0
+                                  print (show p)
                                   move  
+                                  saveCursor
                                   setCursorPosition y x
                                   rightUp
                                 else if x==(x1-1) -- parede direita
-                                then leftDown
-                                else rightDown -- nao toca em nenhuma parede 
+                                then do
+                                  restoreCursor
+                                  p<-getCursorPosition0
+                                  print (show p)
+                                  move  
+                                  saveCursor
+                                  setCursorPosition y x
+                                  leftDown
+                                else do
+                                  restoreCursor
+                                  p<-getCursorPosition0
+                                  print (show p)
+                                  move  
+                                  saveCursor
+                                  setCursorPosition y x
+                                  rightDown -- nao toca em nenhuma parede 
 
 move :: IO ()
 move = do  c <- hGetChar stdin         
-          case (ord c) of
+           case (ord c) of
              100 -> moveLeft
              102 -> moveRight
-             _  -> return (saveCursor)
+             _  -> return ()
 
 moveLeft :: IO ()
 moveLeft = do 
