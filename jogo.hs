@@ -9,13 +9,17 @@ data Diresao = Esq_cima| Esq_baixo | Dir_cima| Dir_baixo
 
 main :: IO()
 main = do
-  setCursorPosition 10 25
-  clearScreen
+  hSetEcho stdin False
+  hideCursor
+  setCursorPosition 25 40
+  hPutStr stdout "----------------"
+  setCursorPosition 20 (-1)
+  clearFromCursorToScreenBeginning
   saveCursor
-  leftUp
+  leftUp 40
 
-leftUp :: IO ()
-leftUp = do 
+leftUp :: Int->IO ()
+leftUp xPlataforma = do 
    threadDelay 100000
    clearScreen
    restoreCursor
@@ -23,99 +27,135 @@ leftUp = do
    cursorBackward 2 
    hPutChar stdout '@'
    saveCursor
-   --skateMove
-   --restoreCursor
-   directEC
+   skateMove xPlataforma 3
+  
 
-rightUp :: IO ()
-rightUp = do 
+rightUp :: Int->IO ()
+rightUp xPlataforma = do 
    threadDelay 100000
-   clearScreen
    restoreCursor
+   clearFromCursorToScreenBeginning
    hCursorUp stdout 1
    hPutChar stdout '@'
    saveCursor
-   --skateMove
-   restoreCursor
-   directDC
+   skateMove xPlataforma 1 
+   
 
-rightDown :: IO ()
-rightDown = do 
+rightDown :: Int->IO ()
+rightDown xPlataforma = do 
    threadDelay 100000
-   clearScreen
    restoreCursor
+   clearFromCursorToScreenBeginning
    hCursorDown stdout 1
    hPutChar stdout '@'
    saveCursor
-   --skateMove
-   restoreCursor
-   directDB
+   skateMove xPlataforma 2
 
-leftDown :: IO ()
-leftDown = do 
+leftDown :: Int->IO ()
+leftDown xPlataforma = do 
    threadDelay 100000
-   clearScreen
    restoreCursor
+   clearFromCursorToScreenBeginning
    hCursorDown stdout 1
    cursorBackward 2 
    hPutChar stdout '@'
    saveCursor
-   --skateMove
-   --restoreCursor
-   directEB
+   skateMove xPlataforma 4
+
             
    
-directEC :: IO()
-directEC = do
+directEC :: Int->IO()
+directEC xPlataforma = do
+  restoreCursor
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
   
   case bolinha of 
     Just(y,x)-> case terminal of
                     Just(y1,x1)-> if y==1 --parede superior
-                                then leftDown
+                                then leftDown xPlataforma
                                 else if x== 1 -- parede esquerda
-                                then rightUp  
-                                else leftUp -- nao toca em nenhuma parede 
+                                then rightUp xPlataforma  
+                                else leftUp xPlataforma -- nao toca em nenhuma parede 
                            
          
                 
-directEB :: IO()
-directEB = do
+directEB :: Int->IO()
+directEB xPlataforma = do
+  restoreCursor
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
   
   case bolinha of 
     Just(y,x)-> case terminal of
                     Just(y1,x1)-> if y==(y1-1) --parede inferior
-                                then leftUp
+                                then leftUp xPlataforma
                                 else if x==1 -- parede esquerda
-                                then rightDown                 
-                                else leftDown -- nao toca em nenhuma parede 
+                                then rightDown xPlataforma                 
+                                else leftDown xPlataforma -- nao toca em nenhuma parede 
 
 
-directDB :: IO()
-directDB = do
+directDB :: Int->IO()
+directDB xPlataforma = do
+  restoreCursor
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
   
   case bolinha of 
     Just(y,x)-> case terminal of
-                    Just(y1,x1)-> if y == (y1-1) --parede inferior
-                                then rightUp
-                                else if x==(x1-1) -- parede direita
-                                then leftDown
-                                else rightDown -- nao toca em nenhuma parede 
+                    Just(y1,x1)-> if y == (y1-1)  --parede inferior
+                                  then rightUp xPlataforma
+                                  else if x==(x1-1) -- parede direita
+                                  then leftDown xPlataforma
+                                  else rightDown xPlataforma -- nao toca em nenhuma parede 
 
-directDC :: IO()
-directDC = do
+directDC :: Int->IO()
+directDC xPlataforma = do
+  restoreCursor
   bolinha <- getCursorPosition0
   terminal <-getTerminalSize
   
   case bolinha of 
     Just(y,x)-> case terminal of
                     Just(y1,x1)-> if x==(x1-1) -- parede direita
-                                then leftUp
+                                then leftUp xPlataforma
                                 else if y==1 --parede superior
-                                then rightDown
-                                else rightUp -- nao toca em nenhuma parede
+                                then rightDown xPlataforma
+                                else rightUp xPlataforma -- nao toca em nenhuma parede
+
+
+
+skateMove :: Int->Int->IO ()
+skateMove xPlataforma direcao = do  
+  c <- hGetChar stdin
+  case (ord c) of
+    97 -> moveLeft (xPlataforma -1) direcao
+    100 -> moveRight(xPlataforma +1)direcao
+    _  -> return ()
+    
+
+moveLeft ::Int->Int->IO ()
+moveLeft xPlataforma direcao = do 
+       setCursorPosition 25 xPlataforma
+       clearFromCursorToLineEnd
+       hPutStr stdout "----------------"
+       if direcao == 1
+       then directDC xPlataforma
+       else if direcao == 2
+       then directDB xPlataforma
+       else if direcao == 3
+       then directEC xPlataforma
+       else directEB xPlataforma
+
+moveRight ::Int->Int->IO ()
+moveRight xPlataforma direcao = do 
+       setCursorPosition 25 xPlataforma
+       clearFromCursorToLineBeginning
+       hPutStr stdout "----------------"
+       if direcao == 1
+       then directDC xPlataforma
+       else if direcao == 2
+       then directDB xPlataforma
+       else if direcao == 3
+       then directEC xPlataforma
+       else directEB xPlataforma
