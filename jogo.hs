@@ -88,7 +88,7 @@ directEB xPlataforma = do
   
   case bolinha of 
     Just(y,x)-> case terminal of
-                    Just(y1,x1)-> if y==(y1-1) --parede inferior
+                    Just(y1,x1)-> if y == (y1-1) && ( (x-xPlataforma) < 17  ) && ( (x-xPlataforma) >0  )  --parede inferior
                                 then leftUp xPlataforma
                                 else if x==1 -- parede esquerda
                                 then rightDown xPlataforma                 
@@ -103,7 +103,7 @@ directDB xPlataforma = do
   
   case bolinha of 
     Just(y,x)-> case terminal of
-                    Just(y1,x1)-> if y == (y1-1)  --parede inferior
+                    Just(y1,x1)-> if y == (y1-1) && ( (x-xPlataforma) < 17  ) && ( (x-xPlataforma) >0  )  --parede inferior
                                   then rightUp xPlataforma
                                   else if x==(x1-1) -- parede direita
                                   then leftDown xPlataforma
