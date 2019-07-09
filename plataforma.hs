@@ -1,57 +1,38 @@
-#!/usr/bin/env stack
+
 
 import System.Console.ANSI
 import Data.Char
 import System.IO
 
 
+main ::IO()
+main = do
+  hSetEcho stdin False
+  setCursorPosition 25 40
+  hPutStr stdout "----------------"
+  skateMove 40
 
 
-main                    :: IO ()
-main =  do hSetEcho stdin False
-           hideCursor
-           clearScreen
-           hPutStr stdout "----------------"
-           move
-
-move :: IO ()
-move = do  c <- hGetChar stdin
-           case (ord c) of
-             38 -> moveUp
-             40  -> moveDown
-             97 -> moveLeft
-             100 -> moveRight
-             _  -> return ()
+skateMove :: Int->IO ()
+skateMove xPlataforma = do  
+  c <- hGetChar stdin
+  case (ord c) of
+    97 -> moveLeft (xPlataforma -1)
+    100 -> moveRight(xPlataforma +1)
+    _  -> return ()
 
 
-
-moveUp :: IO ()
-moveUp = do 
-       clearScreen
-       hCursorBackward stdout 1
-       hCursorUp stdout 1
-       hPutStr stdout "***"
-       move
-
-moveDown :: IO ()
-moveDown = do 
-       clearScreen
-       hCursorBackward stdout 1
-       hCursorDown stdout 1
-       hPutStr stdout "***"
-       move
-moveLeft :: IO ()
-moveLeft = do 
-       clearScreen
-       --hCursorBackward stdout 1
-       hCursorBackward stdout 17
+moveLeft ::Int->IO ()
+moveLeft xPlataforma = do 
+       setCursorPosition 25 xPlataforma
+       clearFromCursorToLineEnd
        hPutStr stdout "----------------"
-       move
+       skateMove xPlataforma
 
-moveRight :: IO ()
-moveRight = do 
-       clearScreen
-       hCursorBackward stdout 16
-       hCursorForward stdout 1
+moveRight ::Int->IO ()
+moveRight xPlataforma = do 
+       setCursorPosition 25 xPlataforma
+       clearFromCursorToLineBeginning
        hPutStr stdout "----------------"
-       move
+       skateMove xPlataforma
+
